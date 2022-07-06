@@ -22,7 +22,7 @@ and sst Command Line Executables, such as:
 - SMART and Sensor information.
 ## Installation
 
-- Download [Intel's Memory and Storage Tool CLI](https://www.intel.com/content/www/us/en/download/19520/736794/intel-memory-and-storage-tool-cli-command-line-interface.html) (LATEST TESTED VERSION 1.12) or download [Solidigm Storage Tool CLI](https://www.intel.com/content/www/us/en/download/19520/736794/intel-memory-and-storage-tool-cli-command-line-interface.html) (LATEST TESTED VERSION 2.0).
+- Download [Intel's Memory and Storage Tool CLI](https://www.intel.com/content/www/us/en/download/19520/736794/intel-memory-and-storage-tool-cli-command-line-interface.html) (LATEST TESTED VERSION 1.12) or download [Solidigm Storage Tool CLI](https://www.intel.com/content/www/us/en/download/19520/736794/intel-memory-and-storage-tool-cli-command-line-interface.html) (LATEST TESTED VERSION 1.1).
 - Install the downloaded software.
 - Download and run "MAS for 7".
 - Specify the "Intel Memory and Storage" or "Solidigm Storage Tool" installation path.
