@@ -38,7 +38,7 @@ No, you don't need this application to have a smooth experience with your Intel 
 Yes. (Windows 7 is more popular, hence the name :P )
 
 #### Is it a virus?
-The entire Visual Studio Solution can be found here. You can double check the code behind it yourself.
+The entire Visual Studio Solution can be found here. You can double check the code behind it yourself. Since the executable scans for Media Storage Drives, you may receive a warning from your Antivirus.
 
 #### Why would anyone develop such a tool?
 Good practise... and it looks good on my CV.
