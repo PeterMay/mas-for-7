@@ -5,12 +5,12 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace MAS7.Classes
+namespace MAS7.MAS
 {
     /// <summary>
     /// <see langword="static"/> Provides access to Intel/Solidigm Memory and Storage CLI functions.
     /// </summary>
-    public static class MASFunctions
+    public static class MASConsole
     {
         /// <summary>
         /// Type of Memory and Storage tool Progress.
