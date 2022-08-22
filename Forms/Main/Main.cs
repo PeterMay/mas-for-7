@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using MAS7.MAS;
+using MAS7.Drives;
 
 namespace MAS7.Forms
 {
@@ -142,11 +143,11 @@ namespace MAS7.Forms
             // Get index of Storage device.
             int index = int.Parse(_drivesList[cmbxDrive.SelectedIndex].Index);
             // Update Taskbar.
-            UpdateTaskbar(MASConsole.Progress.Optimization, MASConsole.ProgressState.Started);
+            UpdateTaskbar(MasInstance.Progress.Optimization, MasInstance.ProgressState.Started);
             // Disable UI.
             SetUIState(false);
             // Run SSD Optimizer.
-            new Task(() => MASConsole.RunOptimizer(this, index, _commandLine, _solidigm)).Start();
+            new Task(() => MasInstance.RunOptimizer(this, index, _commandLine, _solidigm)).Start();
         }
 
         /// <summary>
@@ -159,11 +160,11 @@ namespace MAS7.Forms
             // Get index of Storage device.
             int index = int.Parse(_drivesList[cmbxDrive.SelectedIndex].Index);
             // Update Taskbar.
-            UpdateTaskbar(MASConsole.Progress.QuickDiagnostic, MASConsole.ProgressState.Started);
+            UpdateTaskbar(MasInstance.Progress.QuickDiagnostic, MasInstance.ProgressState.Started);
             // Disable UI.
             SetUIState(false);
             // Run Quick Diagnostic Scan.
-            new Task(() => MASConsole.RunQuickTest(this, index, _commandLine, _solidigm)).Start();
+            new Task(() => MasInstance.RunQuickTest(this, index, _commandLine, _solidigm)).Start();
         }
 
         /// <summary>
@@ -176,11 +177,11 @@ namespace MAS7.Forms
             // Get index of Storage device.
             int index = int.Parse(_drivesList[cmbxDrive.SelectedIndex].Index);
             // Update Taskbar.
-            UpdateTaskbar(MASConsole.Progress.FullDiagnostic, MASConsole.ProgressState.Started, false);
+            UpdateTaskbar(MasInstance.Progress.FullDiagnostic, MasInstance.ProgressState.Started, false);
             // Disable UI.
             SetUIState(false);
             // Run Full Diagnostic Scan.
-            new Task(() => MASConsole.RunFullTest(this, index, _commandLine, _solidigm)).Start();
+            new Task(() => MasInstance.RunFullTest(this, index, _commandLine, _solidigm)).Start();
         }
 
         /// <summary>
@@ -195,11 +196,11 @@ namespace MAS7.Forms
             // Get index of Storage device.
             int index = int.Parse(_drivesList[cmbxDrive.SelectedIndex].Index);
             // Update Taskbar.
-            UpdateTaskbar(MASConsole.Progress.FirmwareUpdate, MASConsole.ProgressState.Started, false);
+            UpdateTaskbar(MasInstance.Progress.FirmwareUpdate, MasInstance.ProgressState.Started, false);
             // Disable UI.
             SetUIState(false);
             // Run Firmware Update.
-            new Thread(() => MASConsole.RunFirmwareUpdate(this, index, _solidigm)).Start();
+            new Thread(() => MasInstance.RunFirmwareUpdate(this, index, _solidigm)).Start();
         }
 
         /// <summary>
@@ -256,19 +257,19 @@ namespace MAS7.Forms
             dgvSensor.Rows.Clear();
             dgvSensor.Refresh();
             // Get SMART information and update DataGridView dgvSMART.
-            List<SMARTinfo> smartInfo = MASConsole.GetSMART(int.Parse(SelectedDrive.Index), _solidigm);
-            foreach (SMARTinfo info in smartInfo)
+            List<SmartInfo> smartInfo = MasInstance.GetSMART(int.Parse(SelectedDrive.Index), _solidigm);
+            foreach (SmartInfo info in smartInfo)
             {
-                dgvSMART.Rows.Insert(dgvSMART.Rows.Count, info.GetPropertyValue(SMARTinfo.Property.Action),
-                    info.GetPropertyValue(SMARTinfo.Property.Attribute), info.GetPropertyValue(SMARTinfo.Property.Description),
-                    info.GetPropertyValue(SMARTinfo.Property.ID), info.GetPropertyValue(SMARTinfo.Property.Normalized),
-                    info.GetPropertyValue(SMARTinfo.Property.Raw), info.GetPropertyValue(SMARTinfo.Property.Status),
-                    info.GetPropertyValue(SMARTinfo.Property.Threshold), info.GetPropertyValue(SMARTinfo.Property.Worst),
-                    info.GetPropertyValue(SMARTinfo.Property.Current), info.GetPropertyValue(SMARTinfo.Property.Low),
-                    info.GetPropertyValue(SMARTinfo.Property.High));
+                dgvSMART.Rows.Insert(dgvSMART.Rows.Count, info.GetPropertyValue(SmartInfo.Property.Action),
+                    info.GetPropertyValue(SmartInfo.Property.Attribute), info.GetPropertyValue(SmartInfo.Property.Description),
+                    info.GetPropertyValue(SmartInfo.Property.ID), info.GetPropertyValue(SmartInfo.Property.Normalized),
+                    info.GetPropertyValue(SmartInfo.Property.Raw), info.GetPropertyValue(SmartInfo.Property.Status),
+                    info.GetPropertyValue(SmartInfo.Property.Threshold), info.GetPropertyValue(SmartInfo.Property.Worst),
+                    info.GetPropertyValue(SmartInfo.Property.Current), info.GetPropertyValue(SmartInfo.Property.Low),
+                    info.GetPropertyValue(SmartInfo.Property.High));
             }
             // Get Sensor information and update DataGridView dgvSensor.
-            List<SensorInfo> sensorInfos = MASConsole.GetSensorInfo(int.Parse(SelectedDrive.Index), _solidigm);
+            List<SensorInfo> sensorInfos = MasInstance.GetSensorInfo(int.Parse(SelectedDrive.Index), _solidigm);
             foreach (SensorInfo info in sensorInfos)
                 dgvSensor.Rows.Insert(dgvSensor.Rows.Count, info.Property, info.Value);
         }
@@ -310,7 +311,7 @@ namespace MAS7.Forms
         {
             // Get Storage Media Drives.
             // Add them on ComboBox cmbxDrive Item Collection.
-            _drivesList = MASConsole.GetDrives(_IntelExclsv);
+            _drivesList = MasInstance.GetDrives(_IntelExclsv);
             for (int cnt = 0; cnt < _drivesList.Count; cnt++)
                 cmbxDrive.Items.Add(_drivesList[cnt].Caption);
         }
@@ -320,15 +321,15 @@ namespace MAS7.Forms
         /// </summary>
         /// <param name="progress">MAS progress.</param>
         /// <param name="value">Value of progress.</param>
-        public void SetProgressValue(MASConsole.Progress progress, int value)
+        public void SetProgressValue(MasInstance.Progress progress, int value)
         {
             // Get the appropriate ProgressBar and Label control.
             // Check if InvokeRequired.
             // Update ProgressBar and Label value.
             switch (progress)
             {
-                case MASConsole.Progress.FullDiagnostic:
-                case MASConsole.Progress.QuickDiagnostic:
+                case MasInstance.Progress.FullDiagnostic:
+                case MasInstance.Progress.QuickDiagnostic:
                     // QuickDiagnostic and FullDiagnostic process don't require a Value.
                     if (pbrDiagnstoic.InvokeRequired)
                     {
@@ -342,7 +343,7 @@ namespace MAS7.Forms
                     if (value != 0) pbrDiagnstoic.MarqueeAnimationSpeed = 50;
                     else pbrDiagnstoic.MarqueeAnimationSpeed = 0;
                     return;
-                case MASConsole.Progress.Optimization:
+                case MasInstance.Progress.Optimization:
                     if (pbrOptimize.InvokeRequired)
                     {
                         pbrOptimize.Invoke(new MethodInvoker(() => pbrOptimize.Value = value));
@@ -418,16 +419,16 @@ namespace MAS7.Forms
         /// <param name="progress">MAS progress.</param>
         /// <param name="progressState">State of progress.</param>
         /// <param name="message">Show message on Taskbar.</param>
-        public void UpdateTaskbar(MASConsole.Progress progress, MASConsole.ProgressState progressState, bool message = true)
+        public void UpdateTaskbar(MasInstance.Progress progress, MasInstance.ProgressState progressState, bool message = true)
         {
             // Get current Progress.
             string balloonText, taskbarText;
             switch (progressState)
             {
-                case MASConsole.ProgressState.Started:
+                case MasInstance.ProgressState.Started:
                     balloonText = "Started ";
                     break;
-                case MASConsole.ProgressState.Running:
+                case MasInstance.ProgressState.Running:
                     balloonText = "Running ";
                     break;
                 default:
@@ -438,16 +439,16 @@ namespace MAS7.Forms
             // Get current Task.
             switch (progress)
             {
-                case MASConsole.Progress.FullDiagnostic:
+                case MasInstance.Progress.FullDiagnostic:
                     taskbarText = "Full Diagnostic Scan.";
                     break;
-                case MASConsole.Progress.QuickDiagnostic:
+                case MasInstance.Progress.QuickDiagnostic:
                     taskbarText = "Quick Diagnostic Scan.";
                     break;
-                case MASConsole.Progress.Optimization:
+                case MasInstance.Progress.Optimization:
                     taskbarText = "SSD Optimizer.";
                     break;
-                case MASConsole.Progress.FirmwareUpdate:
+                case MasInstance.Progress.FirmwareUpdate:
                     taskbarText = "Firmware Update.";
                     break;
                 default:

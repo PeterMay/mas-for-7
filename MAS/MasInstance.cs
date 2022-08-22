@@ -4,13 +4,14 @@ using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Diagnostics;
+using MAS7.Drives;
 
 namespace MAS7.MAS
 {
     /// <summary>
     /// <see langword="static"/> Provides access to Intel/Solidigm Memory and Storage CLI functions.
     /// </summary>
-    public static class MASConsole
+    public static class MasInstance
     {
         /// <summary>
         /// Type of Memory and Storage tool Progress.
@@ -230,8 +231,8 @@ namespace MAS7.MAS
         /// </summary>
         /// <param name="index">Media Storage Device index.</param>
         /// <param name="solidigm">Use sst.exe or IntelMAS.exe </param>
-        /// <returns>List of <see cref="SMARTinfo"/> with all SMART properties for a Media Storage Device.</returns>
-        public static List<SMARTinfo> GetSMART(int index, bool solidigm)
+        /// <returns>List of <see cref="SmartInfo"/> with all SMART properties for a Media Storage Device.</returns>
+        public static List<SmartInfo> GetSMART(int index, bool solidigm)
         {
             // Create new process.
             Process intelProcess;
@@ -239,40 +240,40 @@ namespace MAS7.MAS
             else intelProcess = NewProcess("show -a -smart -intelssd " + index + " IncludeNVMeSmartHealthLog=true", false, solidigm);
             intelProcess.Start();
 
-            List<SMARTinfo> smartList = new List<SMARTinfo>();
-            SMARTinfo info = new SMARTinfo();
+            List<SmartInfo> smartList = new List<SmartInfo>();
+            SmartInfo info = new SmartInfo();
             string output;
             // Get output and add info to appropriate property.
             while ((output = intelProcess.StandardOutput.ReadLine()) != null)
             {
                 if (output.Contains(" -"))
-                    info.AddPropertyValue(SMARTinfo.Property.Attribute, output.Substring(2, 2));
+                    info.AddPropertyValue(SmartInfo.Property.Attribute, output.Substring(2, 2));
                 else if (output.Contains("Action"))
-                    info.AddPropertyValue(SMARTinfo.Property.Action, output.Substring(9));
+                    info.AddPropertyValue(SmartInfo.Property.Action, output.Substring(9));
                 else if (output.Contains("Description"))
-                    info.AddPropertyValue(SMARTinfo.Property.Description, output.Substring(14));
+                    info.AddPropertyValue(SmartInfo.Property.Description, output.Substring(14));
                 else if (output.Contains("ID"))
-                    info.AddPropertyValue(SMARTinfo.Property.ID, output.Substring(5));
+                    info.AddPropertyValue(SmartInfo.Property.ID, output.Substring(5));
                 else if (output.Contains("Normalized"))
-                    info.AddPropertyValue(SMARTinfo.Property.Normalized, output.Substring(13));
+                    info.AddPropertyValue(SmartInfo.Property.Normalized, output.Substring(13));
                 else if (output.Contains("Raw"))
-                    info.AddPropertyValue(SMARTinfo.Property.Raw, output.Substring(6));
+                    info.AddPropertyValue(SmartInfo.Property.Raw, output.Substring(6));
                 else if (output.Contains("Status"))
-                    info.AddPropertyValue(SMARTinfo.Property.Status, output.Substring(9));
+                    info.AddPropertyValue(SmartInfo.Property.Status, output.Substring(9));
                 else if (output.Contains("Threshold"))
-                    info.AddPropertyValue(SMARTinfo.Property.Threshold, output.Substring(12));
+                    info.AddPropertyValue(SmartInfo.Property.Threshold, output.Substring(12));
                 else if (output.Contains("CurrentTemperature"))
-                    info.AddPropertyValue(SMARTinfo.Property.Current, output.Substring(21));
+                    info.AddPropertyValue(SmartInfo.Property.Current, output.Substring(21));
                 else if (output.Contains("HighestTemperature"))
-                    info.AddPropertyValue(SMARTinfo.Property.High, output.Substring(21));
+                    info.AddPropertyValue(SmartInfo.Property.High, output.Substring(21));
                 else if (output.Contains("LowestTemperature"))
-                    info.AddPropertyValue(SMARTinfo.Property.Low, output.Substring(20));
+                    info.AddPropertyValue(SmartInfo.Property.Low, output.Substring(20));
                 else if (output.Contains("Worst"))
                 {
-                    info.AddPropertyValue(SMARTinfo.Property.Worst, output.Substring(8));
+                    info.AddPropertyValue(SmartInfo.Property.Worst, output.Substring(8));
                     info.FillEmptyValues();
                     smartList.Add(info);
-                    info = new SMARTinfo();
+                    info = new SmartInfo();
                 }
             }
             return smartList;
@@ -340,200 +341,6 @@ namespace MAS7.MAS
             }
             return mediaDrives;
 
-        }
-    }
-
-    /// <summary>
-    /// Represents a Media Storage Device.
-    /// </summary>
-    public class MediaDrive
-    {
-        #region MediaDrive Properties
-        public string Caption { get; }
-        public string FirmwareRevision { get; }
-        public string InterfaceType { get; }
-        public string MediaType { get; }
-        public string Model { get; }
-        public string Partitions { get; }
-        public string SerialNumber { get; }
-        public string Size { get; }
-        public string Status { get; }
-        public string Index { get; }
-        #endregion
-
-        public MediaDrive(ManagementObject moDrive)
-        {
-            Caption = moDrive["Caption"].ToString();
-            FirmwareRevision = moDrive["FirmwareRevision"].ToString();
-            InterfaceType = moDrive["InterfaceType"].ToString();
-            MediaType = moDrive["MediaType"].ToString();
-            Model = moDrive["Model"].ToString();
-            Partitions = moDrive["Partitions"].ToString();
-            SerialNumber = moDrive["SerialNumber"].ToString();
-            Size = (decimal.Parse(moDrive["Size"].ToString()) / 1073741824).ToString().Substring(0, 8);
-            Status = moDrive["Status"].ToString();
-            Index = moDrive["Index"].ToString();
-        }
-    }
-
-    /// <summary>
-    /// Provides access to values of all SMART properties of a <see cref="MediaDrive"/>.
-    /// </summary>
-    public class SMARTinfo
-    {
-        /// <summary>
-        /// Type of SMART property.
-        /// </summary>
-        public enum Property
-        {
-            Action,
-            Attribute,
-            Description,
-            ID,
-            Normalized,
-            Raw,
-            Status,
-            Threshold,
-            Worst,
-            Current,
-            High,
-            Low
-        }
-
-        #region SMARTinfo Properties
-        protected string Action { get; set; }
-        protected string Attribute { get; set; }
-        protected string Description { get; set; }
-        protected string ID { get; set; }
-        protected string Normalized { get; set; }
-        protected string Raw { get; set; }
-        protected string Status { get; set; }
-        protected string Threshold { get; set; }
-        protected string Worst { get; set; }
-        protected string Current { get; set; }
-        protected string High { get; set; }
-        protected string Low { get; set; }
-        #endregion
-
-        /// <summary>
-        /// Set value of a SMART property.
-        /// </summary>
-        /// <param name="propertyType">Type of SMART <see cref="Property"/>.</param>
-        /// <param name="value">New value of SMART property.</param>
-        public void AddPropertyValue(Property propertyType, string value)
-        {
-            // Just a precaution.
-            if (value == null) value = "Unknown";
-            switch (propertyType)
-            {
-                case Property.Action:
-                    Action = value;
-                    break;
-                case Property.Attribute:
-                    Attribute = value;
-                    break;
-                case Property.Description:
-                    Description = value;
-                    break;
-                case Property.ID:
-                    ID = value;
-                    break;
-                case Property.Normalized:
-                    Normalized = value;
-                    break;
-                case Property.Raw:
-                    Raw = value;
-                    break;
-                case Property.Status:
-                    Status = value;
-                    break;
-                case Property.Threshold:
-                    Threshold = value;
-                    break;
-                case Property.Worst:
-                    Worst = value;
-                    break;
-                case Property.Current:
-                    Current = value;
-                    break;
-                case Property.High:
-                    High = value;
-                    break;
-                case Property.Low:
-                    Low = value;
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Get value of a SMART property.
-        /// </summary>
-        /// <param name="propertyType">Type of SMART <see cref="Property"/>.</param>
-        public string GetPropertyValue(Property propertyType)
-        {
-            switch (propertyType)
-            {
-                case Property.Action:
-                    return Action;
-                case Property.Attribute:
-                    return Attribute;
-                case Property.Description:
-                    return Description;
-                case Property.ID:
-                    return ID;
-                case Property.Normalized:
-                    return Normalized;
-                case Property.Raw:
-                    return Raw;
-                case Property.Status:
-                    return Status;
-                case Property.Threshold:
-                    return Threshold;
-                case Property.Worst:
-                    return Worst;
-                case Property.Current:
-                    return Current;
-                case Property.High:
-                    return High;
-                case Property.Low:
-                    return Low;
-                default:
-                    return "Unknown";
-            }
-        }
-
-        /// <summary>
-        /// Fill all empty SMART <see cref="Property"/> values.
-        /// </summary>
-        public void FillEmptyValues()
-        {
-            if (string.IsNullOrEmpty(Action)) Action = "Unknown";
-            if (string.IsNullOrEmpty(Attribute)) Attribute = "Unknown";
-            if (string.IsNullOrEmpty(Description)) Description = "Unknown";
-            if (string.IsNullOrEmpty(ID)) ID = "Unknown";
-            if (string.IsNullOrEmpty(Normalized)) Normalized = "Unknown";
-            if (string.IsNullOrEmpty(Raw)) Raw = "Unknown";
-            if (string.IsNullOrEmpty(Status)) Status = "Unknown";
-            if (string.IsNullOrEmpty(Threshold)) Threshold = "Unknown";
-            if (string.IsNullOrEmpty(Worst)) Worst = "Unknown";
-            if (string.IsNullOrEmpty(Current)) Status = "Unknown";
-            if (string.IsNullOrEmpty(High)) Threshold = "Unknown";
-            if (string.IsNullOrEmpty(Low)) Worst = "Unknown";
-        }
-    }
-
-    /// <summary>
-    /// Provides access to values of all properties of a <see cref="MediaDrive"/>'s sensors.
-    /// </summary>
-    public class SensorInfo
-    {
-        public string Property { get; }
-        public string Value { get; }
-
-        public SensorInfo(string property, string value)
-        {
-            Property = property;
-            Value = value;
         }
     }
 }
