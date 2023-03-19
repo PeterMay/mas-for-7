@@ -22,7 +22,7 @@ IntelMAS and SST Command Line Executables, such as:
 
 ## Installation
 
-- Download and Install [Intel's Memory and Storage Tool CLI](https://www.intel.com/content/www/us/en/download/19520/736794/intel-memory-and-storage-tool-cli-command-line-interface.html) (LATEST TESTED VERSION 1.12) or download [Solidigm Storage Tool CLI](https://www.intel.com/content/www/us/en/download/19520/736794/intel-memory-and-storage-tool-cli-command-line-interface.html) (LATEST TESTED VERSION 1.1).
+- Download and Install [Intel's Memory and Storage Tool CLI](https://www.mediafire.com/file/bu0s0xztbcwti7v/MAS_1.12.172.rar/file) (LATEST TESTED VERSION 1.12) or download Solidigm Storage Tool CLI (LATEST TESTED VERSION 1.1).
 - Download and run "MAS for 7".
 - Specify the "Intel Memory and Storage" or "Solidigm Storage Tool" installation path.
 
@@ -47,6 +47,9 @@ Good practise... and it looks good on my CV.
 #### Can I use/copy ****? I need it for my project...
 Go ahead!
 
+#### What happened to Solidigm Storage Tool compatibility?
+The latest tested CLI version is 1.1. Unfortunately, it's impossible to find a working link to download said version.
+
 
 ## Feedback
 
@@ -56,4 +59,3 @@ If you have any feedback, please reach out to me at gavenatore@gmail.com.
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
-
