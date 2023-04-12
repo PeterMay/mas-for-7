@@ -112,7 +112,7 @@ namespace MAS7.Forms
             this.cmbxDrive.Name = "cmbxDrive";
             this.cmbxDrive.Size = new System.Drawing.Size(325, 23);
             this.cmbxDrive.TabIndex = 2;
-            this.cmbxDrive.SelectedIndexChanged += new System.EventHandler(this.SelectDrive);
+            this.cmbxDrive.SelectedIndexChanged += new System.EventHandler(this.OnSelectDriveIndexChange);
             // 
             // cxmsDrives
             // 
@@ -128,7 +128,7 @@ namespace MAS7.Forms
             this.cxmsiCopyValue.Name = "cxmsiCopyValue";
             this.cxmsiCopyValue.Size = new System.Drawing.Size(134, 22);
             this.cxmsiCopyValue.Text = "Copy Value";
-            this.cxmsiCopyValue.Click += new System.EventHandler(this.CopyObjectText);
+            this.cxmsiCopyValue.Click += new System.EventHandler(this.OnCopyObjectEvent);
             // 
             // cxmsiRefreshDrives
             // 
@@ -149,7 +149,7 @@ namespace MAS7.Forms
             this.tsiCopy.Name = "tsiCopy";
             this.tsiCopy.Size = new System.Drawing.Size(102, 22);
             this.tsiCopy.Text = "Copy";
-            this.tsiCopy.Click += new System.EventHandler(this.CopyObjectText);
+            this.tsiCopy.Click += new System.EventHandler(this.OnCopyObjectEvent);
             // 
             // lblDrive
             // 
@@ -163,8 +163,8 @@ namespace MAS7.Forms
             // 
             // tbcMain
             // 
-            this.tbcMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tbcMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbcMain.Controls.Add(this.tbpgDetails);
             this.tbcMain.Controls.Add(this.tbpgSensor);
@@ -208,8 +208,8 @@ namespace MAS7.Forms
             // 
             // lblSize
             // 
-            this.lblSize.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.lblSize.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSize.AutoSize = true;
             this.lblSize.ContextMenuStrip = this.cxmsDetails;
@@ -233,8 +233,8 @@ namespace MAS7.Forms
             // 
             // lblMediaType
             // 
-            this.lblMediaType.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.lblMediaType.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMediaType.AutoSize = true;
             this.lblMediaType.ContextMenuStrip = this.cxmsDetails;
@@ -258,8 +258,8 @@ namespace MAS7.Forms
             // 
             // lblPartitions
             // 
-            this.lblPartitions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.lblPartitions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPartitions.AutoSize = true;
             this.lblPartitions.ContextMenuStrip = this.cxmsDetails;
@@ -512,7 +512,7 @@ namespace MAS7.Forms
             this.btnOptimize.TabIndex = 6;
             this.btnOptimize.Text = "Run";
             this.btnOptimize.UseVisualStyleBackColor = true;
-            this.btnOptimize.Click += new System.EventHandler(this.RunOptimization);
+            this.btnOptimize.Click += new System.EventHandler(this.OnRunOptimizationClick);
             // 
             // lblOptimizationProg
             // 
@@ -565,7 +565,7 @@ namespace MAS7.Forms
             this.btnFullDiagnostic.TabIndex = 8;
             this.btnFullDiagnostic.Text = "Full Diagnostic";
             this.btnFullDiagnostic.UseVisualStyleBackColor = true;
-            this.btnFullDiagnostic.Click += new System.EventHandler(this.RunFullDiagnostic);
+            this.btnFullDiagnostic.Click += new System.EventHandler(this.OnRunFullDiagnosticClick);
             // 
             // btnQuickDiagnostic
             // 
@@ -576,7 +576,7 @@ namespace MAS7.Forms
             this.btnQuickDiagnostic.TabIndex = 7;
             this.btnQuickDiagnostic.Text = "Quick Diagnostic";
             this.btnQuickDiagnostic.UseVisualStyleBackColor = true;
-            this.btnQuickDiagnostic.Click += new System.EventHandler(this.RunQuickDiagnostic);
+            this.btnQuickDiagnostic.Click += new System.EventHandler(this.OnRunQuickDiagnosticClick);
             // 
             // pbrDiagnstoic
             // 
@@ -633,7 +633,7 @@ namespace MAS7.Forms
             this.btnUpdate.TabIndex = 2;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = true;
-            this.btnUpdate.Click += new System.EventHandler(this.RunUpdate);
+            this.btnUpdate.Click += new System.EventHandler(this.OnRunUpdateClick);
             // 
             // lblFirmware
             // 
@@ -652,7 +652,7 @@ namespace MAS7.Forms
             this.btnSettings.TabIndex = 5;
             this.btnSettings.Text = "Settings";
             this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.SettingsOpen);
+            this.btnSettings.Click += new System.EventHandler(this.OnSettingsOpenClick);
             // 
             // ntfiTaskbar
             // 
@@ -660,7 +660,7 @@ namespace MAS7.Forms
             this.ntfiTaskbar.ContextMenuStrip = this.cxmsTaskbar;
             this.ntfiTaskbar.Icon = ((System.Drawing.Icon)(resources.GetObject("ntfiTaskbar.Icon")));
             this.ntfiTaskbar.Text = "Intel MAS for 7";
-            this.ntfiTaskbar.DoubleClick += new System.EventHandler(this.TaskbarDoubleClick);
+            this.ntfiTaskbar.DoubleClick += new System.EventHandler(this.OnTaskbarDoubleClick);
             // 
             // cxmsTaskbar
             // 
@@ -677,14 +677,14 @@ namespace MAS7.Forms
             this.cxmsiOpen.Name = "cxmsiOpen";
             this.cxmsiOpen.Size = new System.Drawing.Size(103, 22);
             this.cxmsiOpen.Text = "Open";
-            this.cxmsiOpen.Click += new System.EventHandler(this.TaskbarDoubleClick);
+            this.cxmsiOpen.Click += new System.EventHandler(this.OnTaskbarDoubleClick);
             // 
             // cxmsiExit
             // 
             this.cxmsiExit.Name = "cxmsiExit";
             this.cxmsiExit.Size = new System.Drawing.Size(103, 22);
             this.cxmsiExit.Text = "Exit";
-            this.cxmsiExit.Click += new System.EventHandler(this.TaskbarExit);
+            this.cxmsiExit.Click += new System.EventHandler(this.OnTaskbarExit);
             // 
             // Main
             // 
@@ -701,8 +701,8 @@ namespace MAS7.Forms
             this.MaximizeBox = false;
             this.Name = "Main";
             this.Text = "Intel MAS for Windows 7";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainClosing);
-            this.Resize += new System.EventHandler(this.MainResize);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnMainClosing);
+            this.Resize += new System.EventHandler(this.OnMainResize);
             this.cxmsDrives.ResumeLayout(false);
             this.cxmsDetails.ResumeLayout(false);
             this.tbcMain.ResumeLayout(false);

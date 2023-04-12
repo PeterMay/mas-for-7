@@ -9,7 +9,7 @@ namespace MAS7.Forms
     /// </summary>
     public partial class Settings : Form
     {
-        // Indicates a change on settings values.
+        // Value changes flag.
         private bool _changes = false;
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace MAS7.Forms
         /// Update GUI to match current settings.
         /// </summary>
         /// <remarks>Raised on <see cref="Settings"/> Load Event.</remarks>
-        private void SettingsLoad(object sender, EventArgs args)
+        private void OnSettingsLoad(object sender, EventArgs args)
         {
             // Update GUI to match user settings.
             txbPath.Text = Properties.Settings.Default.MASPath;
@@ -38,28 +38,48 @@ namespace MAS7.Forms
         /// Check if <see cref="Settings"/> Form can close.
         /// </summary>
         /// <remarks>Raised on <see cref="Settings"/> Closing Event.</remarks>
-        private void SettingsClosing(object sender, FormClosingEventArgs args)
+        private void OnSettingsClosing(object sender, FormClosingEventArgs args)
         {
             // If changes have been made, inform user.
             if (_changes && DialogResult == DialogResult.Cancel)
             {
                 DialogResult dialogResult = MessageBox.Show("Changes you made will not be saved.", "Cancel",
                                                                MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                if (dialogResult == DialogResult.Cancel)
-                {
-                    // Cancel close.
-                    args.Cancel = true;
-                    return;
-                }
+                // Cancel close.
+                if (dialogResult == DialogResult.Cancel) args.Cancel = true;
             }
-            // Indicate cancellation.
+        }
+
+        /// <summary>
+        /// Save new application settings.
+        /// </summary>
+        private void OnSaveSettingsClick(object sender, EventArgs args)
+        {
+            // Save new settings, then close.
+            Properties.Settings.Default.MASPath = txbPath.Text;
+            Properties.Settings.Default.IntelExclusive = ckbxIntelExclusive.Checked;
+            Properties.Settings.Default.CommandLine = ckbxCommandLine.Checked;
+            Properties.Settings.Default.MinimizeOnTray = ckbxMinimizeTray.Checked;
+            Properties.Settings.Default.CloseOnTray = ckbxCloseTray.Checked;
+            Properties.Settings.Default.Save();
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        /// <summary>
+        /// Cancel new application settings.
+        /// </summary>
+        private void OnCancelSettingsClick(object sender, EventArgs args)
+        {
+            // Indicate cancellation
             DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         /// <summary>
         /// Sets text to <see cref="txbPath"/>.
         /// </summary>
-        private void ChangePath(object sender, EventArgs args)
+        private void OnChangePathClick(object sender, EventArgs args)
         {
             bool found = false;
             string path = "";
@@ -78,8 +98,7 @@ namespace MAS7.Forms
                     // Inform user. If cancel, then break.
                     DialogResult messageDialogResult = MessageBox.Show("Please specify Intel/Solidigm Storage Tool installation path.",
                         "Installation Path", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                    if (messageDialogResult == DialogResult.Cancel)
-                        break;
+                    if (messageDialogResult == DialogResult.Cancel) break;
                 }
             } while (!File.Exists(path + "\\IntelMAS.exe") && !File.Exists(path + "\\sst.exe"));
             // Check if .exe is found.
@@ -91,48 +110,5 @@ namespace MAS7.Forms
             _changes = true;
         }
 
-        /// <summary>
-        /// Save new application settings.
-        /// </summary>
-        private void SaveSettings(object sender, EventArgs args)
-        {
-            // Save new settings, then close.
-            Properties.Settings.Default.MASPath = txbPath.Text;
-            Properties.Settings.Default.IntelExclusive = ckbxIntelExclusive.Checked;
-            Properties.Settings.Default.CommandLine = ckbxCommandLine.Checked;
-            Properties.Settings.Default.MinimizeOnTray = ckbxMinimizeTray.Checked;
-            Properties.Settings.Default.CloseOnTray = ckbxCloseTray.Checked;
-            Properties.Settings.Default.Save();
-            DialogResult = DialogResult.OK;
-            Close();
-        }
-
-        /// <summary>
-        /// Cancel new application settings.
-        /// </summary>
-        private void CancelSettings(object sender, EventArgs args)
-        {
-            // Indicate cancellation
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        /// <summary>
-        /// Indicate changes on application settings.
-        /// </summary>
-        private void CheckState(object sender, EventArgs args)
-        {
-            // Set _chanes value to true.
-            _changes = true;
-        }
-
-        /// <summary>
-        /// Open donation URL on default broswer.
-        /// </summary>
-        private void Donate(object sender, LinkLabelLinkClickedEventArgs args)
-        {
-            // Launch default web broswer and navigate to link.
-            System.Diagnostics.Process.Start("https://www.paypal.com/donate/?hosted_button_id=4TVA7LRBBM9N6");
-        }
     }
 }

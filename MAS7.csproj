@@ -27,7 +27,7 @@
     <PublisherName>TheGAVStudios</PublisherName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <DisallowUrlActivation>true</DisallowUrlActivation>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>MAS7.Program</StartupObject>
@@ -92,6 +92,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Console\ICliTool.cs" />
+    <Compile Include="Console\SstCli.cs" />
+    <Compile Include="Enums\Progress.cs" />
+    <Compile Include="Enums\ProgressState.cs" />
+    <Compile Include="Enums\SmartInfoProperty.cs" />
     <Compile Include="Forms\Diagnostic\Diagnostic.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,7 +109,10 @@
     <Compile Include="Forms\Main\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="MAS\MASConsole.cs" />
+    <Compile Include="Console\MasCli.cs" />
+    <Compile Include="Models\MediaDrive.cs" />
+    <Compile Include="Models\SensorInfo.cs" />
+    <Compile Include="Models\SmartInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -147,9 +155,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
@@ -169,5 +174,6 @@
   <ItemGroup>
     <None Include="Resources\icon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

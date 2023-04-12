@@ -40,7 +40,6 @@ namespace MAS7.Forms
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnChangePath = new System.Windows.Forms.Button();
             this.txbPath = new System.Windows.Forms.TextBox();
-            this.lnkDonate = new System.Windows.Forms.LinkLabel();
             this.grbxAppSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -60,7 +59,7 @@ namespace MAS7.Forms
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.CancelSettings);
+            this.btnCancel.Click += new System.EventHandler(this.OnCancelSettingsClick);
             // 
             // btnOK
             // 
@@ -70,11 +69,10 @@ namespace MAS7.Forms
             this.btnOK.TabIndex = 8;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.SaveSettings);
+            this.btnOK.Click += new System.EventHandler(this.OnSaveSettingsClick);
             // 
             // grbxAppSettings
             // 
-            this.grbxAppSettings.Controls.Add(this.lnkDonate);
             this.grbxAppSettings.Controls.Add(this.ckbxCloseTray);
             this.grbxAppSettings.Controls.Add(this.ckbxMinimizeTray);
             this.grbxAppSettings.Controls.Add(this.ckbxCommandLine);
@@ -154,7 +152,7 @@ namespace MAS7.Forms
             this.btnChangePath.TabIndex = 15;
             this.btnChangePath.Text = "Change";
             this.btnChangePath.UseVisualStyleBackColor = true;
-            this.btnChangePath.Click += new System.EventHandler(this.ChangePath);
+            this.btnChangePath.Click += new System.EventHandler(this.OnChangePathClick);
             // 
             // txbPath
             // 
@@ -166,18 +164,6 @@ namespace MAS7.Forms
             this.txbPath.Size = new System.Drawing.Size(359, 23);
             this.txbPath.TabIndex = 14;
             this.txbPath.Text = "C:\\Program Files\\";
-            // 
-            // lnkDonate
-            // 
-            this.lnkDonate.AutoSize = true;
-            this.lnkDonate.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkDonate.Location = new System.Drawing.Point(319, 117);
-            this.lnkDonate.Name = "lnkDonate";
-            this.lnkDonate.Size = new System.Drawing.Size(46, 15);
-            this.lnkDonate.TabIndex = 16;
-            this.lnkDonate.TabStop = true;
-            this.lnkDonate.Text = "Donate";
-            this.lnkDonate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Donate);
             // 
             // Settings
             // 
@@ -198,8 +184,8 @@ namespace MAS7.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
             this.TopMost = true;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingsClosing);
-            this.Load += new System.EventHandler(this.SettingsLoad);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnSettingsClosing);
+            this.Load += new System.EventHandler(this.OnSettingsLoad);
             this.grbxAppSettings.ResumeLayout(false);
             this.grbxAppSettings.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -220,6 +206,5 @@ namespace MAS7.Forms
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnChangePath;
         private System.Windows.Forms.TextBox txbPath;
-        private System.Windows.Forms.LinkLabel lnkDonate;
     }
 }
